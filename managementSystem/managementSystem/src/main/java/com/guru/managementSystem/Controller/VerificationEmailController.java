@@ -19,7 +19,7 @@ public class VerificationEmailController {
         // Check if the token exists in the database
         try{
             String userEmail = authenticationService.confirmToken(token);
-            return ResponseEntity.ok("Email address confirmed" + userEmail);
+            return ResponseEntity.ok("Email address confirmed " + userEmail);
         } catch (IllegalStateException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

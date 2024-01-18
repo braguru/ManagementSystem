@@ -1,5 +1,6 @@
 package com.guru.managementSystem.Service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -7,6 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class EmailService {
 
     @Autowired
@@ -16,7 +18,7 @@ public class EmailService {
         // Construct your verification email content
         String subject = "Account Verification";
         String body = "Click the following link to verify your account: http://127.0.0.1:8080/api/v1/auth/verify?token=" + token +
-                "<br><p>Link expires on</p>";
+                "<br><p>Link expires in a day.</p>";
         sendEmail(toEmail, subject, body);
     }
 

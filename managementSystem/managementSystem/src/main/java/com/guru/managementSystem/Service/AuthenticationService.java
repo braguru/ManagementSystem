@@ -2,7 +2,6 @@ package com.guru.managementSystem.Service;
 
 import com.guru.managementSystem.Entity.VerificationToken;
 import com.guru.managementSystem.Repository.VerificationTokenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +18,7 @@ import com.guru.managementSystem.securityconfig.JwtService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,10 +29,14 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final VerificationTokenRepository tokenRepository;
-    @Autowired
-    private EmailService emailService;
+
+    private final EmailService emailService;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        Optional<User> userExists = repository.findByEmail(request.getEmail());
+        if (userExists.isPresent()){
+            throw new IllegalStateException("Email already exists");
+        }
 
         User user = User.builder()
             .firstname(request.getFirstname())
@@ -48,7 +52,7 @@ public class AuthenticationService {
         String token = UUID.randomUUID().toString();
         String verification_token = createVerificationToken(user, token);
         emailService.sendVerificationEmail(user.getEmail(), token);
-        
+
         return AuthenticationResponse.builder()
                 .token(verification_token)
                 .token(jwtToken)
@@ -88,11 +92,10 @@ public class AuthenticationService {
         User user = tokenRepository1.getUser();
         user.setEnabled(true);
         repository.save(user);
-        return user.getEmail();
+        return "Account activated";
     }
 
     private String createVerificationToken(User user, String token) {
-
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
