@@ -9,7 +9,6 @@ import com.guru.managementSystem.Entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
     Optional<User> findByEmail(String email);
     
 }

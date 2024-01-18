@@ -15,7 +15,7 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
-    // Business logic for POST Metohods
+    // Business logic for POST Methods
     public Product addProduct(Product product){
         return repository.save(product);
     }
@@ -25,7 +25,7 @@ public class ProductService {
     }
     // ---------------------------------------------------- //
 
-    // Business logic for GET Metohods
+    // Business logic for GET Methods
     public List<Product> getProducts(){
         return repository.findAll();
     }
@@ -40,7 +40,7 @@ public class ProductService {
     // ----------------------------------------------------- //
 
 
-    // Business logic for DELETE Metohod
+    // Business logic for DELETE Method
     public String deleteProduct(int id){
         repository.deleteById(id);
         return "Successfully deleted" + id;
@@ -53,7 +53,7 @@ public class ProductService {
     // ---------------------------------------------------- //
 
 
-    // Business logic for UPDATE Metohods
+    // Business logic for UPDATE Methods
     public Product updateProduct(Product product){
         Product existingProduct = repository.findById(product.getId()).orElse(null);
         existingProduct.setName(product.getName());
